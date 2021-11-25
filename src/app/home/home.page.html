@@ -1,0 +1,80 @@
+<ion-content [fullscreen]="true" style="--overflow: hidden;">
+	<div
+	[class.reduceM]="scalem === 0"
+	[style.z-index]="zmap" 
+	style="position: fixed;width:100%;height:100%;">
+		<div id="mapbox" style="width:100%; height:100%;" ></div>
+		<div *ngIf="scalem === 0" style="top:0;left:0;width:100%;height:100%;position:absolute;z-index:10000;border: 2px solid cornflowerblue;" (click)="setmap()"></div>
+	</div>
+	<div
+	[class.reduceM]="scalev === 0"
+	[style.z-index]="zvid"  
+	style="position: fixed;width:100%;height:100%;">
+		<img  [src]="openURL()" style="width:100%; height:100%;object-fit: cover;">
+		<div *ngIf="scalev === 0" style="top:0;left:0;width:100%;height:100%;position:absolute;z-index:10000;border: 2px solid cornflowerblue;" (click)="setvid()"></div>
+	</div>
+  <!-- overlay  haut-->
+  <div style="position: fixed;width:100%;height:54px;top:0;left:0;z-index:2000;background: rgba(25,25,25,0.8);">  
+      <ion-row>
+        <!-- cl left -->
+        <ion-col size="2">
+          <svg *ngIf="iscll === 1" class="svg startanim" 
+          width="18px" height="17px" viewBox="0 0 18 17" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <g id="prev" transform="translate(8.500000, 8.500000) scale(-1, 1) translate(-8.500000, -8.500000)">
+            <polygon class="arrow" points="16.3746667 8.33860465 7.76133333 15.3067621 6.904 14.3175671 14.2906667 8.34246869 6.908 2.42790698 7.76 1.43613596"></polygon>
+            <polygon class="arrow-fixed" points="16.3746667 8.33860465 7.76133333 15.3067621 6.904 14.3175671 14.2906667 8.34246869 6.908 2.42790698 7.76 1.43613596"></polygon>
+            <path d="M-1.48029737e-15,0.56157424 L-1.48029737e-15,16.1929159 L9.708,8.33860465 L-2.66453526e-15,0.56157424 L-1.48029737e-15,0.56157424 Z M1.33333333,3.30246869 L7.62533333,8.34246869 L1.33333333,13.4327013 L1.33333333,3.30246869 L1.33333333,3.30246869 Z"></path>
+            </g>
+          </svg>
+          <svg *ngIf="iscll === 0" class="svg" 
+          width="18px" height="17px" viewBox="0 0 18 17" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <g id="prev" transform="translate(8.500000, 8.500000) scale(-1, 1) translate(-8.500000, -8.500000)">
+            <polygon class="arrow" points="16.3746667 8.33860465 7.76133333 15.3067621 6.904 14.3175671 14.2906667 8.34246869 6.908 2.42790698 7.76 1.43613596"></polygon>
+            <polygon class="arrow-fixed" points="16.3746667 8.33860465 7.76133333 15.3067621 6.904 14.3175671 14.2906667 8.34246869 6.908 2.42790698 7.76 1.43613596"></polygon>
+            <path d="M-1.48029737e-15,0.56157424 L-1.48029737e-15,16.1929159 L9.708,8.33860465 L-2.66453526e-15,0.56157424 L-1.48029737e-15,0.56157424 Z M1.33333333,3.30246869 L7.62533333,8.34246869 L1.33333333,13.4327013 L1.33333333,3.30246869 L1.33333333,3.30246869 Z"></path>
+            </g>
+          </svg>
+        </ion-col>
+        <!-- light left -->
+        <ion-col size="1">
+          <img *ngIf="islig" src="assets/lon.png" height="54" width="54" style="margin-top: -5px;">
+          <img *ngIf="!islig" src="assets/loff.png" height="54" width="54" style="margin-top: -5px;">
+        </ion-col>
+        <!-- direction -->
+        
+        <!--<ion-col size="3">Dir {{bearing}}</ion-col>
+        <ion-col size="1">{{iscll}} {{isclr}}</ion-col>-->
+
+        <ion-col size="6">
+          <div style="width: 100%;text-align: center;margin-top: -12px;color:white;">
+            <div style="font-size: 48px;font-weight: 900;">{{vitesse}}</div>
+            <div style="font-size: 10px;margin-top: -9px;"> km/h</div> 
+          </div>
+        </ion-col>
+        <ion-col size="1">
+          <img *ngIf="islig" src="assets/lon.png" height="54" width="54" style="margin-top: -5px;transform: rotate(180deg);">
+          <img *ngIf="!islig" src="assets/loff.png" height="54" width="54" style="margin-top: -5px;transform: rotate(180deg);">
+        </ion-col>
+        <ion-col size="2">
+          <svg *ngIf="isclr === 1"  class="svg startanim" 
+          width="18px" height="17px" viewBox="-1 0 18 17" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+              <g>
+                  <polygon class="arrow" points="16.3746667 8.33860465 7.76133333 15.3067621 6.904 14.3175671 14.2906667 8.34246869 6.908 2.42790698 7.76 1.43613596"></polygon>
+                  <polygon class="arrow-fixed" points="16.3746667 8.33860465 7.76133333 15.3067621 6.904 14.3175671 14.2906667 8.34246869 6.908 2.42790698 7.76 1.43613596"></polygon>
+                  <path d="M-4.58892184e-16,0.56157424 L-4.58892184e-16,16.1929159 L9.708,8.33860465 L-1.64313008e-15,0.56157424 L-4.58892184e-16,0.56157424 Z M1.33333333,3.30246869 L7.62533333,8.34246869 L1.33333333,13.4327013 L1.33333333,3.30246869 L1.33333333,3.30246869 Z"></path>
+              </g>
+          </svg>
+          <svg *ngIf="isclr === 0"  class="svg" style="color:white;"
+          width="18px" height="17px" viewBox="-1 0 18 17" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+              <g>
+                  <polygon class="arrow" points="16.3746667 8.33860465 7.76133333 15.3067621 6.904 14.3175671 14.2906667 8.34246869 6.908 2.42790698 7.76 1.43613596"></polygon>
+                  <polygon class="arrow-fixed" points="16.3746667 8.33860465 7.76133333 15.3067621 6.904 14.3175671 14.2906667 8.34246869 6.908 2.42790698 7.76 1.43613596"></polygon>
+                  <path d="M-4.58892184e-16,0.56157424 L-4.58892184e-16,16.1929159 L9.708,8.33860465 L-1.64313008e-15,0.56157424 L-4.58892184e-16,0.56157424 Z M1.33333333,3.30246869 L7.62533333,8.34246869 L1.33333333,13.4327013 L1.33333333,3.30246869 L1.33333333,3.30246869 Z"></path>
+              </g>
+          </svg>
+          <!--<img src="assets/rarrowon.png" height="60" width="60" style="margin-top: -5px;">-->
+        </ion-col>
+      </ion-row>
+  </div>
+
+</ion-content>
